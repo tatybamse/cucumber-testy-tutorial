@@ -3,11 +3,13 @@ package org.fasttrackit.automation;
 import org.fasttrackit.util.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 //import org.testng.annotations.Test;
-
+@RunWith(JUnit4.class)
 public class LoginTest extends TestBase {
 
     @Test
