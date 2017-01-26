@@ -10,6 +10,7 @@ import org.junit.runners.JUnit4;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -18,12 +19,18 @@ import static org.hamcrest.core.Is.is;
 @RunWith(JUnit4.class)
 public class LoginTest extends TestBase {
 
+    private LoginPage loginPage;
+
+    public LoginTest() {
+        loginPage = PageFactory.initElements(driver, LoginPage.class);
+    }
+
     @Test
     public void validLoginTest() {
 
         openBrowser();
 
-        login("eu@fast.com", "eu.pass");
+        loginPage.login("eu@fast.com", "eu.pass");
 
         try {
             WebElement logoutBtn = driver.findElement(By.linkText("Logout"));
@@ -38,7 +45,7 @@ public class LoginTest extends TestBase {
 
             openBrowser();
 
-            login("eu@fast.com", "eu.pass123");
+            loginPage.login("eu@fast.com", "eu.pass123");
 
             WebElement errorElement = driver.findElement(By.className("error-msg"));
             System.out.println(errorElement.getText());
@@ -48,11 +55,11 @@ public class LoginTest extends TestBase {
             }
 
     @Test
-    public void changePass(){
+    public void invalidActualPass(){
 
         openBrowser();
 
-        login("eu@fast.com", "eu.pass");
+        loginPage.login("eu@fast.com", "eu.pass");
 
 
         WebElement preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
@@ -70,7 +77,14 @@ public class LoginTest extends TestBase {
         WebElement closeWindowBtn = driver.findElement(By.xpath(("//div[@id='preferences-win']/form//button[contains(@class,'btn-default')]")));
         closeWindowBtn.click();
 
-        waitBeforeClick();
+            }
+
+    @Test
+    public void invalidNewPass(){
+
+        openBrowser();
+
+        loginPage.login("eu@fast.com", "eu.pass");
 
 
         driver.findElement(By.xpath("//button[@data-target='#preferences-win']")).click();
@@ -83,6 +97,9 @@ public class LoginTest extends TestBase {
         waitBeforeClick();
 
         errorsWhenChangePassword("Password does not match the confirm password!");
+
+        WebElement closeWindowBtn = driver.findElement(By.xpath(("//div[@id='preferences-win']/form//button[contains(@class,'btn-default')]")));
+        closeWindowBtn.click();
 
 
     }
@@ -123,18 +140,6 @@ public class LoginTest extends TestBase {
     }
 
 
-    public void login(String user, String password) {
-
-        WebElement emailField = driver.findElement(By.id("email"));
-        WebElement passField = driver.findElement(By.name("password"));
-        WebElement loginBtn = driver.findElement(By.className("login-btn"));
-
-        System.out.println("Enter an email:");
-        emailField.sendKeys(user);
-        passField.sendKeys(password);
-        loginBtn.click();
-
-    }
 
 }
 
