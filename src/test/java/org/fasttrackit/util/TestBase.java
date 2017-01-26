@@ -34,4 +34,18 @@ public abstract class TestBase {
     protected void assertThatElementIsReady(WebLocator element) {
         assertThat("{ " +  element.toString() + " } was not found!", element.ready(), is(true));
     }
+
+
+    protected void openBrowser() {
+        System.out.println("ready");
+        driver.get("https://rawgit.com/sdl/Testy/master/src/test/functional/app-demo/login.html");
+    }
+
+    protected void waitBeforeClick() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
