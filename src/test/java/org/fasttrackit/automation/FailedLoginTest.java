@@ -11,14 +11,15 @@ import static org.hamcrest.core.Is.is;
 
 public class FailedLoginTest extends TestBase {
 
-    private LoginPage failedLoginPage;
+//    private LoginPage failedLoginPage;
+    private LoginView failedLoginPage = new LoginView();
 
 
-    public FailedLoginTest() {
-
-        failedLoginPage = PageFactory.initElements(driver, LoginPage.class);
-
-    }
+//    public FailedLoginTest() {
+//
+//        failedLoginPage = PageFactory.initElements(driver, LoginPage.class);
+//
+//    }
 
     @Test
 
@@ -26,7 +27,7 @@ public class FailedLoginTest extends TestBase {
 
         openBrowser();
 
-        failedLoginPage.invalidLogin("eu@fast.com", "", "Please enter your password!");
+        failedLoginPage.invalidLogin("eu@fast.com", "", "Please enter your password!!");
 
 
     }
