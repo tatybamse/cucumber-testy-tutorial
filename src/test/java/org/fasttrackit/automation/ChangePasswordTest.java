@@ -45,26 +45,19 @@ public class ChangePasswordTest extends TestBase {
 
         waitBeforeClick();
 
-        errorsWhenChangePassword("Password does not match the confirm password!");
-
-
+        assertThat(changePasswordPage.getStatusMessage(),is("Password does not match the confirm password!"));
 
 
     }
 
     @Test
-    public void invalidPasswordTest() {
+    public void emptyNewPasswordTest() {
 
+        openPage("eu@fast.com", "eu.pass");
 
-        loginPage.login("eu@fast.com", "eu.pass");
+        changePasswordPage.changePassword("eu.pass", " ","");
 
-
-        WebElement preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
-        preferencesBtn.click();
-
-        waitBeforeClick();
-
-        changePasswordPage.changePassword("eu.pass", "news","new");
+        assertThat(changePasswordPage.getStatusMessage(),is("Your preview password is incorrect!"));
 
 
 
@@ -74,35 +67,77 @@ public class ChangePasswordTest extends TestBase {
     @Test
     public void invalidActualPass(){
 
-        openBrowser();
-
-        loginPage.login("eu@fast.com", "eu.pass");
-
-
-        WebElement preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
-        preferencesBtn.click();
-
-        waitBeforeClick();
+        openPage("eu@fast.com", "eu.pass");
 
 
         changePasswordPage.changePassword("wrong.pass", "new.password", "new.password");
 
         waitBeforeClick();
 
-        errorsWhenChangePassword("Your preview password is incorrect!");
+        assertThat(changePasswordPage.getStatusMessage(),is("Your preview password is incorrect!"));
+
+//        msgWhenChangePassword("Your preview password is incorrect!");
 
 
         changePasswordPage.closeWindow();
 
     }
 
+    @Test
 
-    private void errorsWhenChangePassword(String errors) {
-        WebElement errorMsg = driver.findElement(By.xpath("//form//div[contains(@class,'status-msg')]"));
-        System.out.println(errorMsg.getText());
-        assertThat("Message is displayed",errorMsg.isDisplayed());
-        assertThat("Wrong initial password", errorMsg.getText(), is(errors));
+    public void successfullyChangedPassword(){
+
+        openPage("tu@fast.com", "tu.pass");
+        WebElement preferencesBtn;
+
+        changePasswordPage.changePassword("tu.pass","newpass","newpass");
+
+        waitBeforeClick();
+
+        assertThat(changePasswordPage.getStatusMessage(),is("Your password has been successfully changed."));
+
+//        msgWhenChangePassword("Your password has been successfully changed.");
+
+        changePasswordPage.closeWindow();
+
+        waitBeforeClick();
+
+        changePasswordPage.clickLogOutBtn();
+
+        waitBeforeClick();
+
+        loginPage.login("tu@fast.com", "newpass");
+
+        waitBeforeClick();
+
+        preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
+
+        preferencesBtn.click();
+
+        waitBeforeClick();
     }
+
+    private void openPage(String email, String pass) {
+        openBrowser();
+        loginPage.login(email, pass);
+
+        WebElement preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
+
+        preferencesBtn.click();
+
+        waitBeforeClick();
+    }
+
+
+//    private void msgWhenChangePassword(String errors) {
+//        WebElement errorMsg = driver.findElement(By.xpath("//form//div[contains(@class,'status-msg')]"));
+//        System.out.println(errorMsg.getText());
+//        assertThat("Message is displayed",errorMsg.isDisplayed());
+//        assertThat("Wrong initial password", errorMsg.getText(), is(errors));
+//    }
+
+
+
 
 }
 
