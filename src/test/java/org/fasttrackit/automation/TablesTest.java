@@ -2,6 +2,7 @@ package org.fasttrackit.automation;
 
 
 import com.sdl.selenium.web.WebLocator;
+import com.sdl.selenium.web.form.CheckBox;
 import com.sdl.selenium.web.table.Cell;
 import com.sdl.selenium.web.table.Row;
 import com.sdl.selenium.web.table.Table;
@@ -46,10 +47,21 @@ public class TablesTest extends TestBase {
 
         Row row = table.getRow(new Cell(4, "davidmiller@mail.com" ));
 
-         WebLocator checkbox = new WebLocator(row).setTag("input");
+//         WebLocator checkbox = new WebLocator(row).setTag("input");
+        CheckBox checkbox = new CheckBox(row);
          checkbox.click();
 
+
+         WebLocator tableLocator = new WebLocator().setTag("table");
+         WebLocator firstNameLocator = new WebLocator().setText("Bob");
+         WebLocator lastNameLocator = new WebLocator().setText("Smith");
+         WebLocator rowLocator = new WebLocator(tableLocator).setTag("tr").setChildNodes(firstNameLocator, lastNameLocator);
+         WebLocator checkBoxLocator = new WebLocator().setContainer(rowLocator).setTag("input");
+         checkBoxLocator.click();
     }
+
+
+
 
 
 }
